@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# @Time : 2021/7/12 16:00
+# @Time : 2024/7/12 16:00
 # @desc : hdfs存储数据为orc格式并设置snappy压缩
 __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"

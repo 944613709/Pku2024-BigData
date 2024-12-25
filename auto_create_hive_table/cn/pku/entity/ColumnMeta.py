@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# @Time : 2021/7/8 11:41
+# @Time : 2024/7/8 11:41
 # @desc : todo 列的信息，抽象出的列对象
 # @property : get属性值的方法
 # @columnName.setter ： set属性值的方法

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# @Time : 2021/7/12 15:57
+# @Time : 2024/7/12 15:57
 # @desc : hdfs存储数据为avro格式
 __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"

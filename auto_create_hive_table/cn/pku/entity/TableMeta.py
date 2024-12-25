@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# @Time : 2021/7/8 12:38
+# @Time : 2024/7/8 12:38
 # @desc : 表对应元数据对象
 __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"
