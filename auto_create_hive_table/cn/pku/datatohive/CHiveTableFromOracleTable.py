@@ -5,8 +5,8 @@ __author__ = "pku_2024_bigData"
 
 # 导包
 from pyhive import hive                                                         # 导入Hive操作包
-from auto_create_hive_table.cn.itcast.datatohive import CreateMetaCommon        # 导入常量数据包
-from auto_create_hive_table.cn.itcast.utils import OracleMetaUtil               # 导入Oracle表信息的工具类
+from auto_create_hive_table.cn.pku.datatohive import CreateMetaCommon        # 导入常量数据包
+from auto_create_hive_table.cn.pku.utils import OracleMetaUtil               # 导入Oracle表信息的工具类
 import logging                                                                  # 导入日志记录包
 
 

@@ -23,7 +23,7 @@ BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 logfile_dir = os.path.join(BASE_PATH, 'log')  # 将日志文件放入项目下的 log 文件夹
 
 # ******************注意2：log文件名
-logfile_name = 'itcast.log'
+logfile_name = 'pku.log'
 
 # 如果不存在定义的日志目录就创建一个
 if not os.path.isdir(logfile_dir):

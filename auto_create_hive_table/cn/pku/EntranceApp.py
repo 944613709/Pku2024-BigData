@@ -4,14 +4,14 @@ __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"
 
 # 导入读Oracle表、建Hive表的包
-from auto_create_hive_table.cn.itcast.datatohive import CHiveTableFromOracleTable, CreateMetaCommon, CreateHiveTablePartition, LoadData2DWD
+from auto_create_hive_table.cn.pku.datatohive import CHiveTableFromOracleTable, CreateMetaCommon, CreateHiveTablePartition, LoadData2DWD
 # 导入工具类：连接Oracle工具类、文件工具类、表名构建工具类
-from auto_create_hive_table.cn.itcast.utils import OracleHiveUtil, FileUtil, TableNameUtil
+from auto_create_hive_table.cn.pku.utils import OracleHiveUtil, FileUtil, TableNameUtil
 # 导入日志工具包
 from auto_create_hive_table.config import common
 
 # 根据不同功能接口记录不同的日志
-admin_logger = common.get_logger('itcast')
+admin_logger = common.get_logger('pku')
 
 
 def recordLog(modelName):

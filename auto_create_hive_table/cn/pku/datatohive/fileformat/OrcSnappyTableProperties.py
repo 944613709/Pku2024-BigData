@@ -4,7 +4,7 @@
 __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"
 
-from auto_create_hive_table.cn.itcast.datatohive.fileformat.OrcTableProperties import OrcTableProperties
+from auto_create_hive_table.cn.pku.datatohive.fileformat.OrcTableProperties import OrcTableProperties
 
 
 class OrcSnappyTableProperties(OrcTableProperties):

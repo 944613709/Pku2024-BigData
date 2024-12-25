@@ -4,7 +4,7 @@
 __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"
 
-from auto_create_hive_table.cn.itcast.entity.ColumnMeta import ColumnMeta
+from auto_create_hive_table.cn.pku.entity.ColumnMeta import ColumnMeta
 
 
 class TableMeta(object):

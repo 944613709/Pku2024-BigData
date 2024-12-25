@@ -6,9 +6,9 @@ __author__ = "pku_2024_bigData"
 import logging
 import cx_Oracle
 # 列的信息对象
-from auto_create_hive_table.cn.itcast.entity.ColumnMeta import ColumnMeta
+from auto_create_hive_table.cn.pku.entity.ColumnMeta import ColumnMeta
 # 表的信息对象
-from auto_create_hive_table.cn.itcast.entity.TableMeta import TableMeta
+from auto_create_hive_table.cn.pku.entity.TableMeta import TableMeta
 
 def getTableMeta(oracleConn, tableName) -> TableMeta:
     """

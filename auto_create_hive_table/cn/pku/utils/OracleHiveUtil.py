@@ -4,7 +4,7 @@ __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"
 
 # 导包
-from auto_create_hive_table.cn.itcast.utils import ConfigLoader         # 导入配置文件解析包
+from auto_create_hive_table.cn.pku.utils import ConfigLoader         # 导入配置文件解析包
 import cx_Oracle                                                        # 导入Python连接Oracle依赖库包
 from pyhive import hive                                                 # 导入Python连接Hive依赖包
 import os                                                               # 导入系统包

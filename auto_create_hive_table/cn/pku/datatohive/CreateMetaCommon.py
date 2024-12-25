@@ -4,9 +4,9 @@ __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"
 
 
-from auto_create_hive_table.cn.itcast.datatohive.fileformat.AvroTableProperties import AvroTableProperties
-from auto_create_hive_table.cn.itcast.datatohive.fileformat.OrcSnappyTableProperties import OrcSnappyTableProperties
-from auto_create_hive_table.cn.itcast.datatohive.fileformat.OrcTableProperties import OrcTableProperties
+from auto_create_hive_table.cn.pku.datatohive.fileformat.AvroTableProperties import AvroTableProperties
+from auto_create_hive_table.cn.pku.datatohive.fileformat.OrcSnappyTableProperties import OrcSnappyTableProperties
+from auto_create_hive_table.cn.pku.datatohive.fileformat.OrcTableProperties import OrcTableProperties
 
 # 数据库名常量
 ODS_NAME = 'one_make_ods'
