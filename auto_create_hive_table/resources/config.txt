@@ -1,19 +1,19 @@
 # oracle connect info
 [OracleConn]
-oracleHost=oracle.bigdata.cn
+oracleHost=192.168.88.100
 oraclePort=1521
 oracleSID=helowin
 oracleUName=ciss
 oraclePassWord=123456
 # spark thrift connect info
 [SparkConnHive]
-sparkHiveHost=spark.bigdata.cn
-sparkHivePort=10001
+sparkHiveHost=192.168.88.100
+sparkHivePort=10000
 sparkHiveUName=root
 sparkHivePassWord=123456
 # hive thrift connect info
 [HiveConn]
-hiveHost=hive.bigdata.cn
+hiveHost=192.168.88.100
 hivePort=10000
 hiveUName=root
 hivePassWord=123456

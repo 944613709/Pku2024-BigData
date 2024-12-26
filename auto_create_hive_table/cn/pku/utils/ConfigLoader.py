@@ -7,7 +7,7 @@ import configparser
 
 # load and read config.ini
 config = configparser.ConfigParser()
-config.read('D:\\PythonProject\\OneMake30\\auto_create_hive_table\\resources\\config.txt')
+config.read(r'D:\mycoding\python\bigData_pku2024\OneMake30\auto_create_hive_table\resources\config.txt')
 
 
 # 根据key获得value
