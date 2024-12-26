@@ -61,27 +61,27 @@ class EntranceApp:
             # 1. DWD层数据处理
             self.logger.info("Starting DWD layer processing...")
             if not self.dwd_loader.load_data(date_str):
-                self.logger.error("Failed to process DWD layer")
+                # self.logger.error("Failed to process DWD layer")
                 return False
 
             # 2. DWS层数据处理
             self.logger.info("Starting DWS layer processing...")
             if not self.dws_loader.load_worker_order_stats(date_str):
-                self.logger.error("Failed to process worker order stats in DWS layer")
+                # self.logger.error("Failed to process worker order stats in DWS layer")
                 return False
             
             if not self.dws_loader.load_customer_classify_stats(date_str):
-                self.logger.error("Failed to process customer classification stats in DWS layer")
+                # self.logger.error("Failed to process customer classification stats in DWS layer")
                 return False
 
             # 3. DM层数据处理
             self.logger.info("Starting DM layer processing...")
             if not self.dm_loader.load_worker_order_summary(date_str):
-                self.logger.error("Failed to process worker order summary in DM layer")
+                # self.logger.error("Failed to process worker order summary in DM layer")
                 return False
             
             if not self.dm_loader.load_customer_distribution(date_str):
-                self.logger.error("Failed to process customer distribution in DM layer")
+                # self.logger.error("Failed to process customer distribution in DM layer")
                 return False
 
             # 4. ST层数据处理
@@ -91,17 +91,17 @@ class EntranceApp:
                 month_str, week_str = self.st_loader.get_partition_info(date_str)
                 # 加载工单主题数据
                 if not self.st_loader.load_worker_order_subject(date_str, month_str, week_str):
-                    self.logger.error("Failed to process worker order subject in ST layer")
+                    # self.logger.error("Failed to process worker order subject in ST layer")
                     return False
             except Exception as e:
-                self.logger.error(f"Failed to process ST layer: {str(e)}")
+                # self.logger.error(f"Failed to process ST layer: {str(e)}")
                 return False
 
             self.logger.info("All data processing completed successfully")
             return True
 
         except Exception as e:
-            self.logger.error(f"Error in data processing: {str(e)}")
+           #  self.logger.error(f"Error in data processing: {str(e)}")
             return False
 
 
