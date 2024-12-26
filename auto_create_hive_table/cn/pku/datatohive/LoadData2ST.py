@@ -12,6 +12,7 @@ class LoadData2ST:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.hive_conn = OracleHiveUtil.getSparkHiveConn()
+        self.cursor = self.hive_conn.cursor()
 
     def execute_hql(self, hql: str) -> bool:
         """
@@ -20,7 +21,7 @@ class LoadData2ST:
         :return: 是否执行成功
         """
         try:
-            self.hive_conn.execute(hql)
+            self.cursor.execute(hql)
             return True
         except Exception as e:
             self.logger.error(f"Failed to execute HQL: {str(e)}")
@@ -33,7 +34,8 @@ class LoadData2ST:
         :return: 查询结果列表
         """
         try:
-            return self.hive_conn.execute(hql).fetchall()
+            self.cursor.execute(hql)
+            return self.cursor.fetchall()
         except Exception as e:
             self.logger.error(f"Failed to execute query: {str(e)}")
             return []

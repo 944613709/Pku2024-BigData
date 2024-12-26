@@ -111,13 +111,14 @@ if __name__ == '__main__':
     # 输出信息
     recordLog('ODS&DWD Building AND Load Data')
     # 定义了一个分区变量：指定当前要操作的Hive分区的值为20240101
-    partitionVal = '20240101'
+    partitionVal = '20240102'
     # 调用了获取连接的工具类，构建一个Oracle连接
     oracleConn = OracleHiveUtil.getOracleConn()
     # 调用了获取连接的工具类，构建一个SparkSQL连接
     hiveConn = OracleHiveUtil.getSparkHiveConn()
     # 调用了文件工具类读取表名所在的文件：将所有表的名称放入一个列表：List[102个String类型的表名]
-    tableList = FileUtil.readFileContent("D:\\PythonProject\\OneMake30\\dw\\ods\\meta_data\\tablenames.txt")
+    tableList = FileUtil.readFileContent(
+        r"D:\mycoding\python\bigData_pku2024\OneMake30\dw\ods\meta_data\tablenames.txt")
     # 调用工具类，将全量表的表名存入一个列表，将增量表的表名存入另外一个列表中，再将这两个列表放入一个列表中：List[2个List元素：List1[44张全量表的表名]，List2[57张增量表的表���]]
     tableNameList = TableNameUtil.getODSTableNameList(tableList)
     # ------------------测试：输出获取到的连接以及所有表名

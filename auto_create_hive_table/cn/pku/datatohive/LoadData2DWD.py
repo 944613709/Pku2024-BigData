@@ -17,6 +17,7 @@ class LoadData2DWD:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.hive_conn = OracleHiveUtil.getSparkHiveConn()
+        self.cursor = self.hive_conn.cursor()
 
     def execute_hql(self, hql: str) -> bool:
         """
@@ -25,7 +26,7 @@ class LoadData2DWD:
         :return: 是否执行成功
         """
         try:
-            self.hive_conn.execute(hql)
+            self.cursor.execute(hql)
             return True
         except Exception as e:
             self.logger.error(f"Failed to execute HQL: {str(e)}")
@@ -42,16 +43,30 @@ class LoadData2DWD:
         :return: 是否加载成功
         """
         try:
+            cursor = hive_conn.cursor()
+            
+            # 首先获取目标表的列信息
+            desc_sql = f"DESC {CreateMetaCommon.DWD_NAME}.{table_name}"
+            cursor.execute(desc_sql)
+            columns = []
+            for row in cursor.fetchall():
+                col_name = row[0]
+                if col_name != 'dt':  # 排除分区列
+                    columns.append(col_name)
+            
             # 构建DWD层数据加载SQL
+            columns_str = ", ".join([f"t.{col}" for col in columns])
             hql = f"""
             INSERT OVERWRITE TABLE {CreateMetaCommon.DWD_NAME}.{table_name}
-            SELECT *
-            FROM {CreateMetaCommon.ODS_NAME}.{table_name}
+            PARTITION(dt='{partition_val}')
+            SELECT 
+                {columns_str}
+            FROM {CreateMetaCommon.ODS_NAME}.{table_name} t
             WHERE dt = '{partition_val}'
             """
             
             # 执行HQL
-            hive_conn.execute(hql)
+            cursor.execute(hql)
             return True
             
         except Exception as e:
@@ -80,8 +95,7 @@ class LoadData2DWD:
                 remould_num,
                 inspection_num,
                 alread_complete_num,
-                oil_station_id,
-                dt
+                oil_station_id
             FROM one_make_ods.fact_worker_order
             WHERE dt = '{date_str}';
 
@@ -93,8 +107,7 @@ class LoadData2DWD:
                 process_way_name,
                 call_type,
                 call_status,
-                oil_station_id,
-                dt
+                oil_station_id
             FROM one_make_ods.fact_call_service
             WHERE dt = '{date_str}';
             """

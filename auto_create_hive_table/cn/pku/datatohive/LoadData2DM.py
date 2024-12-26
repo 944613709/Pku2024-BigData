@@ -12,6 +12,7 @@ class LoadData2DM:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.hive_conn = OracleHiveUtil.getSparkHiveConn()
+        self.cursor = self.hive_conn.cursor()
 
     def execute_hql(self, hql: str) -> bool:
         """
@@ -20,7 +21,7 @@ class LoadData2DM:
         :return: 是否执行成功
         """
         try:
-            self.hive_conn.execute(hql)
+            self.cursor.execute(hql)
             return True
         except Exception as e:
             self.logger.error(f"Failed to execute HQL: {str(e)}")
