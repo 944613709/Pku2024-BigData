@@ -10,10 +10,10 @@ from auto_create_hive_table.cn.pku.utils import OracleHiveUtil, FileUtil, TableN
 # 导入日志工具包
 from auto_create_hive_table.config import common
 import logging
-from cn.pku.datatohive.LoadData2DWD import LoadData2DWD
-from cn.pku.datatohive.LoadData2DWS import LoadData2DWS
-from cn.pku.datatohive.LoadData2DM import LoadData2DM
-from cn.pku.datatohive.LoadData2ST import LoadData2ST
+from auto_create_hive_table.cn.pku.datatohive.LoadData2DWD import LoadData2DWD
+from auto_create_hive_table.cn.pku.datatohive.LoadData2DWS import LoadData2DWS
+from auto_create_hive_table.cn.pku.datatohive.LoadData2DM import LoadData2DM
+from auto_create_hive_table.cn.pku.datatohive.LoadData2ST import LoadData2ST
 
 # 根据不同功能接口记录不同的日志
 admin_logger = common.get_logger('pku')

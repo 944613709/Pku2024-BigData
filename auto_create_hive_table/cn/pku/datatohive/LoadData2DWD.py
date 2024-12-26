@@ -3,38 +3,108 @@
 __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"
 
+from typing import List
 import logging
 from auto_create_hive_table.cn.pku.datatohive import CreateMetaCommon
-from auto_create_hive_table.cn.pku.utils import OracleMetaUtil
+from auto_create_hive_table.cn.pku.utils import OracleHiveUtil
 
-
-
-def loadTable(orclConn, hiveConn, tableName, partitionValue):
+class LoadData2DWD:
     """
-    加载ODS层表的数据到DWD层
-    :param orclConn: Oracle连接对象
-    :param hiveConn: Hive连接对象
-    :param tableName: 表名
-    :param partitionValue: 分区值
-    :return: None
+    加载数据到DWD层的处理类
+    主要处理从ODS层到DWD层的数据加工
     """
-    # 从Oracle中获取表的元数据信息
-    tableMeta = OracleMetaUtil.getTableMeta(orclConn, tableName.upper())
-    # SQL拼接：insert overwrite table one_make_dwd.tbname partition(dt='20210101') select
-    buffer = [
-        "insert overwrite table " + CreateMetaCommon.DWD_NAME + "." + tableMeta.tableName + " partition(dt=" + partitionValue + ")\n",
-        "select\n"]
-    # 拼接所有列名
-    allColumns = ', '.join(cname for cname in tableMeta.getColumnNameList())
-    buffer.append(allColumns + "\n")
-    # 拼接：form ods层的表
-    buffer.append("from " + CreateMetaCommon.ODS_NAME + "." + tableMeta.tableName + "\n")
-    # 过滤分区
-    buffer.append("where dt='" + partitionValue + "'")
-    logging.warning(f'SparkSql插入数据，sql\n{"".join(buffer).lower()}')
-    # 将整个SQL语句转换为小写
-    loadSQL = ''.join(buffer).lower()
-    # 获取Hive连接的一个游标
-    cursor = hiveConn.cursor()
-    # 执行SQL语句，加载数据
-    cursor.execute(loadSQL)
+    
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.hive_conn = OracleHiveUtil.getSparkHiveConn()
+
+    def execute_hql(self, hql: str) -> bool:
+        """
+        执行HQL语句
+        :param hql: HQL语句
+        :return: 是否执行成功
+        """
+        try:
+            self.hive_conn.execute(hql)
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to execute HQL: {str(e)}")
+            return False
+
+    @staticmethod
+    def loadTable(oracle_conn, hive_conn, table_name: str, partition_val: str) -> bool:
+        """
+        从ODS层加载数据到DWD层
+        :param oracle_conn: Oracle连接
+        :param hive_conn: Hive连接
+        :param table_name: 表名
+        :param partition_val: 分区值
+        :return: 是否加载成功
+        """
+        try:
+            # 构建DWD层数据加载SQL
+            hql = f"""
+            INSERT OVERWRITE TABLE {CreateMetaCommon.DWD_NAME}.{table_name}
+            SELECT *
+            FROM {CreateMetaCommon.ODS_NAME}.{table_name}
+            WHERE dt = '{partition_val}'
+            """
+            
+            # 执行HQL
+            hive_conn.execute(hql)
+            return True
+            
+        except Exception as e:
+            logging.error(f"Failed to load table {table_name} to DWD: {str(e)}")
+            return False
+
+    def load_data(self, date_str: str) -> bool:
+        """
+        加载指定日期的数据到DWD层
+        :param date_str: 数据日期，格式：YYYYMMDD
+        :return: 是否加载成功
+        """
+        try:
+            # 构建DWD层数据加载SQL
+            hql = f"""
+            -- 加载工单事实表
+            INSERT OVERWRITE TABLE one_make_dwd.fact_worker_order
+            PARTITION(dt='{date_str}')
+            SELECT 
+                wo_id,
+                wo_num,
+                wo_type,
+                wo_status,
+                install_num,
+                repair_num,
+                remould_num,
+                inspection_num,
+                alread_complete_num,
+                oil_station_id,
+                dt
+            FROM one_make_ods.fact_worker_order
+            WHERE dt = '{date_str}';
+
+            -- 加载呼叫服务事实表
+            INSERT OVERWRITE TABLE one_make_dwd.fact_call_service
+            PARTITION(dt='{date_str}')
+            SELECT 
+                call_id,
+                process_way_name,
+                call_type,
+                call_status,
+                oil_station_id,
+                dt
+            FROM one_make_ods.fact_call_service
+            WHERE dt = '{date_str}';
+            """
+            
+            # 执行HQL
+            if self.execute_hql(hql):
+                self.logger.info(f"Successfully loaded data to DWD for date: {date_str}")
+                return True
+            return False
+            
+        except Exception as e:
+            self.logger.error(f"Failed to load data to DWD: {str(e)}")
+            return False
