@@ -1,8 +1,11 @@
 version: '3'
 
 services:
-  pkubigdata_v1:
-    build: .
+  pkubigdata:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: pku-2024bigdata:latest
     container_name: pkubigdata
     volumes:
       - ./auto_create_hive_table:/app/auto_create_hive_table
