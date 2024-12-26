@@ -9,6 +9,11 @@ from auto_create_hive_table.cn.pku.datatohive import CHiveTableFromOracleTable, 
 from auto_create_hive_table.cn.pku.utils import OracleHiveUtil, FileUtil, TableNameUtil
 # 导入日志工具包
 from auto_create_hive_table.config import common
+import logging
+from cn.pku.datatohive.LoadData2DWD import LoadData2DWD
+from cn.pku.datatohive.LoadData2DWS import LoadData2DWS
+from cn.pku.datatohive.LoadData2DM import LoadData2DM
+from cn.pku.datatohive.LoadData2ST import LoadData2ST
 
 # 根据不同功能接口记录不同的日志
 admin_logger = common.get_logger('pku')
@@ -35,20 +40,85 @@ def recordWarnLog(msg):
     return msg
 
 
+class EntranceApp:
+    """
+    数据处理入口类
+    """
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.dwd_loader = LoadData2DWD()
+        self.dws_loader = LoadData2DWS()
+        self.dm_loader = LoadData2DM()
+        self.st_loader = LoadData2ST()
+
+    def process_data(self, date_str: str) -> bool:
+        """
+        处理数据的主入口方法
+        :param date_str: 数据日期，格式：YYYYMMDD
+        :return: 处理是否成功
+        """
+        try:
+            # 1. DWD层数据处理
+            self.logger.info("Starting DWD layer processing...")
+            if not self.dwd_loader.load_data(date_str):
+                self.logger.error("Failed to process DWD layer")
+                return False
+
+            # 2. DWS层数据处理
+            self.logger.info("Starting DWS layer processing...")
+            if not self.dws_loader.load_worker_order_stats(date_str):
+                self.logger.error("Failed to process worker order stats in DWS layer")
+                return False
+            
+            if not self.dws_loader.load_customer_classify_stats(date_str):
+                self.logger.error("Failed to process customer classification stats in DWS layer")
+                return False
+
+            # 3. DM层数据处理
+            self.logger.info("Starting DM layer processing...")
+            if not self.dm_loader.load_worker_order_summary(date_str):
+                self.logger.error("Failed to process worker order summary in DM layer")
+                return False
+            
+            if not self.dm_loader.load_customer_distribution(date_str):
+                self.logger.error("Failed to process customer distribution in DM layer")
+                return False
+
+            # 4. ST层数据处理
+            self.logger.info("Starting ST layer processing...")
+            try:
+                # 获取分区信息
+                month_str, week_str = self.st_loader.get_partition_info(date_str)
+                # 加载工单主题数据
+                if not self.st_loader.load_worker_order_subject(date_str, month_str, week_str):
+                    self.logger.error("Failed to process worker order subject in ST layer")
+                    return False
+            except Exception as e:
+                self.logger.error(f"Failed to process ST layer: {str(e)}")
+                return False
+
+            self.logger.info("All data processing completed successfully")
+            return True
+
+        except Exception as e:
+            self.logger.error(f"Error in data processing: {str(e)}")
+            return False
+
+
 if __name__ == '__main__':
 
     # =================================todo: 1-初始化Oracle、Hive连接，读取表的名称=========================#
     # 输出信息
     recordLog('ODS&DWD Building AND Load Data')
-    # 定义了一个分区变量：指定当前要操作的Hive分区的值为20210101
-    partitionVal = '20210101'
+    # 定义了一个分区变量：指定当前要操作的Hive分区的值为20240101
+    partitionVal = '20240101'
     # 调用了获取连接的工具类，构建一个Oracle连接
     oracleConn = OracleHiveUtil.getOracleConn()
     # 调用了获取连接的工具类，构建一个SparkSQL连接
     hiveConn = OracleHiveUtil.getSparkHiveConn()
     # 调用了文件工具类读取表名所在的文件：将所有表的名称放入一个列表：List[102个String类型的表名]
     tableList = FileUtil.readFileContent("D:\\PythonProject\\OneMake30\\dw\\ods\\meta_data\\tablenames.txt")
-    # 调用工具类，将全量表的表名存入一个列表，将增量表的表名存入另外一个列表中，再将这两个列表放入一个列表中：List[2个List元素：List1[44张全量表的表名]，List2[57张增量表的表名]]
+    # 调用工具类，将全量表的表名存入一个列表，将增量表的表名存入另外一个列表中，再将这两个列表放入一个列表中：List[2个List元素：List1[44张全量表的表名]，List2[57张增量表的表���]]
     tableNameList = TableNameUtil.getODSTableNameList(tableList)
     # ------------------测试：输出获取到的连接以及所有表名
     # print(oracleConn)
