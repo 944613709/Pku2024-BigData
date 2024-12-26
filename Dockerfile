@@ -1,5 +1,5 @@
 # 使用Python 3.8作为基础镜像
-FROM python:3.8-slim
+FROM python:3.9
 
 # 设置工作目录
 WORKDIR /app
