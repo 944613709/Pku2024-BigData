@@ -1,0 +1,240 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>spark.demo</groupId>
+    <artifactId>spark.demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <inceptionYear>2008</inceptionYear>
+    <properties>
+        <scala.version>2.12.8</scala.version>
+    </properties>
+
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>scala-tools.org</id>-->
+<!--            <name>Scala-Tools Maven2 Repository</name>-->
+<!--            <url>http://scala-tools.org/repo-releases</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+    <repositories>
+        <repository>
+            <id>alimaven</id>
+            <url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
+        </repository>
+<!--        <repository>-->
+<!--            <id>scala-tools-repo</id>-->
+<!--            <url>http:// scala-tools.org/repo-releases</url>-->
+<!--        </repository>-->
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+<!--            <id>scala-tools.org</id>-->
+<!--            <name>Scala-Tools Maven2 Repository</name>-->
+<!--            <url>http://scala-tools.org/repo-releases</url>-->
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies>
+        <!--引入Scala依赖库-->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.12.8</version>
+        </dependency>
+        <!-- Spark各组件库================================================================== -->
+        <!--Spark核心库-->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.12</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <!--Spark SQL所需库-->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.12</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <!--Spark Streaming所需库-->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_2.12</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <!--Spark Streaming针对Kafka的依赖库-->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka-0-10_2.12</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <!--Structured Streaming针对Kafka的依赖库-->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql-kafka-0-10_2.12</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+
+        <!--mysql数据库驱动-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.11</version>
+        </dependency>
+
+
+
+        <!-- Spark读写HBase所需库================================================================== -->
+        <!-- Hadoop通用API -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <!-- Hadoop客户端API -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <!-- HBase客户端API -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>2.4.9</version>
+        </dependency>
+        <!-- HBase针对MapReduce的API -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-mapreduce</artifactId>
+            <version>2.4.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-server</artifactId>
+            <version>2.4.9</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.specs</groupId>
+            <artifactId>specs</artifactId>
+            <version>1.2.5</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.scala-tools/maven-scala-plugin -->
+        <dependency>
+            <groupId>org.scala-tools</groupId>
+            <artifactId>maven-scala-plugin</artifactId>
+            <version>2.12</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-eclipse-plugin -->
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-eclipse-plugin</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                    <args>
+                        <arg>-target:jvm-1.5</arg>
+                    </args>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <buildcommands>
+                        <buildcommand>ch.epfl.lamp.sdt.core.scalabuilder</buildcommand>
+                    </buildcommands>
+                    <additionalProjectnatures>
+                        <projectnature>ch.epfl.lamp.sdt.core.scalanature</projectnature>
+                    </additionalProjectnatures>
+                    <classpathContainers>
+                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+                        <classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
+                    </classpathContainers>
+                </configuration>
+            </plugin>
+
+            <!--项目打包插件，将所有依赖库一起打包-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <!--因为依赖jar包中的META-INF中有多余的.SF文件与当前jar包冲突,因此需要排除这些文件。否则可能报java.lang.SecurityException: Invalid signature file digest for Manifest main attributes-->
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass></mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>
