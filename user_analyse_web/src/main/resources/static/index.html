@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索引擎用户搜索关键词实时统计分析</title>
+    <!--引入ECharts的js库-->
+    <script src="js/echarts.min.js"></script>
+
+</head>
+<body>
+<h1>搜索引擎用户搜索关键词实时统计分析</h1>
+<div>
+    <div>
+        <!--单击该按钮将向服务器发送消息-->
+        <input style="width:700px;margin:0 auto;" type="submit" value="开始实时分析" onclick="start()"/><br>
+    </div>
+    <!--为ECharts准备一个定义了宽高的DOM元素-->
+    <div id="main" style="width:1080px;height: 700px; border:1px solid red">图表展示位置</div>
+</div>
+
+<script type="text/javascript">
+    //通过WebSocket连接服务端
+    var webSocket = new WebSocket('ws://localhost:8085/websocket')
+	//初始化ECharts图表
+    var myChart = echarts.init(document.getElementById('main'));
+
+	//连接打开事件。连接成功后自动调用该函数
+    webSocket.onopen = function(event) {
+	    console.log("WebSocket已连接");
+    };
+	//收到消息事件。收到服务端发送过来的消息时自动调用该方法
+    webSocket.onmessage = function(event) {
+	    //解析服务器发送过来的数据
+        var json = JSON.parse(event.data);
+		//处理数据
+        processingData(json);
+    };
+	//发生错误事件。发生错误自动调用该函数
+    webSocket.onerror = function(event) {
+        alert("服务器异常");
+    };
+	//窗口关闭事件。窗口关闭时关闭连接
+    window.unload = function() {
+        webSocket.close();
+    };
+
+
+    //向服务器发送消息
+    function start() {
+	    //向服务器发送测试数据，只有向服务器发送数据，服务器才会触发onMessage()方法
+        webSocket.send('hello');
+        return false;
+    }
+
+    //处理数据，使用柱形图可视化展示
+    function processingData(json){
+        //指定图表的配置项和数据
+        option = {
+          title: {
+              text: '油站业务关键词访问实时排行',//标题
+              subtext: '数据来自油站日志',//副标题
+              textStyle: {
+                  fontWeight: 'bold', //标题字体加粗
+                  color: '#408829'//标题颜色
+              },
+          },
+          tooltip: {//鼠标浮上显示气泡框详情
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+
+          xAxis:
+            {
+              type: 'category',
+              data: json.words //横坐标显示搜索词
+            },
+          yAxis: [
+            {
+              type: 'value'
+            }
+          ],
+          series: [
+            {
+              name: '搜索量',
+              type: 'bar',
+              barWidth: '80%',
+              itemStyle:{
+                color:'#a90000' //柱形图颜色
+              },
+              data: json.counts //纵坐标展示对应的搜索数量
+            }
+          ]
+        };
+		//显示柱形图图表
+        myChart.setOption(option);
+
+    }
+</script>
+</body>
+</html>
