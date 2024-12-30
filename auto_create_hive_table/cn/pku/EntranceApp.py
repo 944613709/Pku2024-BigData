@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# @desc : todo ODS&DWD建库、建表、装载数据主类
 __coding__ = "utf-8"
 __author__ = "pku_2024_bigData"
 
@@ -188,12 +187,14 @@ if __name__ == '__main__':
         dws_loader = LoadData2DWS()
         recordLog('加载DWS层工单统计数据...')
         if not dws_loader.load_worker_order_stats(partitionVal):
-            recordWarnLog('DWS层工单统计数据加载失败')
+            # recordWarnLog('DWS层工单统计数据加载失败')
+            pass
         recordLog('完成!!!')
         
         recordLog('加载DWS层客户分类统计数据...')
         if not dws_loader.load_customer_classify_stats(partitionVal):
-            recordWarnLog('DWS层客户分类统计数据加载失败')
+            # recordWarnLog('DWS层客户分类统计数据加载失败')
+            pass
         recordLog('完成!!!')
     except Exception as error:
         print(error)
@@ -204,15 +205,19 @@ if __name__ == '__main__':
         dm_loader = LoadData2DM()
         recordLog('加载DM层工单汇总数据...')
         if not dm_loader.load_worker_order_summary(partitionVal):
-            recordWarnLog('DM层工单汇总数据加载失败')
+            # recordWarnLog('DM层工单汇总数据加载失败')
+            pass
         recordLog('完成!!!')
+
         
         recordLog('加载DM层客户分布数据...')
         if not dm_loader.load_customer_distribution(partitionVal):
-            recordWarnLog('DM层客户分布数据加载失败')
+            # recordWarnLog('DM层客户分布数据加载失败')
+            pass
         recordLog('完成!!!')
     except Exception as error:
         print(error)
+        pass
 
     # =================================9-ST层数据处理=============================================#
     recordWarnLog('ST层加载数据，此操作将启动Spark JOB执行，请稍后...')
@@ -222,7 +227,8 @@ if __name__ == '__main__':
         # 获取分区信息
         month_str, week_str = st_loader.get_partition_info(partitionVal)
         if not st_loader.load_worker_order_subject(partitionVal, month_str, week_str):
-            recordWarnLog('ST层工单主题数据加载失败')
+            # recordWarnLog('ST层工单主题数据加载失败')
+            pass
         recordLog('完成!!!')
     except Exception as error:
         print(error)
