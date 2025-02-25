@@ -1,22 +1,45 @@
 # PKu2024_bigData 数据仓库项目
 
+[English](README_EN.md) | 简体中文
+
 ## 作者声明
 
-2024级
-
-石卓凡 蒋云涛  赵翊含 郭晓爽
+2024级北京大学大数据课程项目组成员：
+- 石卓凡
+- 蒋云涛
+- 赵翊含
+- 郭晓爽
 
 ## 项目简介
-本项目隶属于北京大学2024年大数据课程项目，是一个数据仓库项目，主要用于自动化创建Hive表并进行数据处理。项目采用分层架构设计，包含从数据接入层(ST)到数据应用层(DM)的完整数据处理流程。
+本项目是北京大学2024年大数据课程的实践项目，实现了一个完整的数据仓库解决方案。项目采用分层架构设计，涵盖了从数据接入层(ST)到数据应用层(DM)的端到端数据处理流程，支持自动化的数据采集、转换和加载过程。
+
+## 技术栈
+- 编程语言：Python 3.8+
+- 数据库：Oracle、Hive
+- 大数据处理：Spark
+- 容器化：Docker & Docker Compose
+- 其他：HDFS、SASL
+
+## 项目特点
+- 完整的数据仓库分层架构（ST -> ODS -> DWD -> DWB -> DWS -> DM）
+- 自动化的数据处理流程
+- 灵活的配置管理系统
+- 完善的日志记录机制
+- 支持Docker容器化部署
+- 多维度数据分析能力
+- 高可扩展性设计
 
 ## 项目结构
 ```
 PKu2024_bigData/
-├── auto_create_hive_table/    # 自动创建Hive表核心功能
+├── auto_create_hive_table/    # 核心功能模块
+│   ├── cn/                    # 主代码目录
+│   │   └── pku/
+│   │       ├── datatohive/   # 数据处理相关类
+│   │       └── utils/        # 工具类
 │   ├── config/               # 配置文件目录
 │   │   ├── settings.py      # 主配置文件
 │   │   └── common.py        # 通用配置
-│   ├── cn/                  # 核心代码
 │   ├── log/                 # 日志目录
 │   └── resources/           # 资源文件
 ├── dw/                      # 数据仓库主目录
@@ -26,10 +49,11 @@ PKu2024_bigData/
 │   ├── dwb/                 # 基础数据层
 │   ├── dws/                 # 服务数据层
 │   └── dm/                  # 数据应用层
-└── venv/                    # Python虚拟环境
-```
+├── docker/                  # Docker相关文件
+├── tests/                   # 测试用例
+└── docs/                   # 项目文档
 
-## 数据仓库架构
+## 系统架构
 ```mermaid
 graph TB
     ST[数据接入层ST] --> ODS[操作数据层ODS]
@@ -45,23 +69,6 @@ graph TB
     style DWS fill:#bff,stroke:#333,stroke-width:2px
     style DM fill:#ffb,stroke:#333,stroke-width:2px
 ```
-
-## 功能特点
-1. 自动化Hive表创建
-2. 完整的数据仓库分层架构
-3. 灵活的配置管理
-4. 详细的日志记录
-
-## 配置说明
-- 日志配置：支持控制台和文件两种输出方式
-- 日志轮转：单个日志文件最大5M，最多保留5个备份
-- 日志格式：支持标准、简单、测试三种格式
-
-## 使用说明
-1. 确保已安装Python环境
-3. 安装依赖包
-4. 配置相关参数
-5. 运行程序
 
 ## 数据流程
 ```mermaid
@@ -80,175 +87,147 @@ sequenceDiagram
     DWS->>DM: 数据集市应用
 ```
 
-## 添加Docker相关说明
-
-本项目是一个基于 Python 的数据仓库项目，实现了从 ODS 到 DWD、DWS、DM 和 ST 层的数据处理流程。
-
-## 项目结构
-
-```
-OneMake30/
-├── auto_create_hive_table/    # 主要代码目录
-│   ├── cn/
-│   │   └── pku/
-│   │       ├── datatohive/    # 数据处理相关类
-│   │       └── utils/         # 工具类
-│   ├── config/                # 配置文件
-│   └── resources/             # 资源文件
-├── dw/                        # 数据仓库相关文件
-│   ├── ods/                   # ODS层配置
-│   ├── dwd/                   # DWD层配置
-│   └── st/                    # ST层配置
-└── logs/                      # 日志文件
-```
-
 ## 环境要求
 
+### 系统要求
+- Linux/Windows/MacOS
+- 8GB+ RAM
+- 50GB+ 可用磁盘空间
+
+### 软件依赖
 - Python 3.8+
 - Oracle 客户端
-- Hive 环境
-- Spark 环境
-- Docker (可选)
+- Hive 2.x+
+- Spark 2.x+
+- Docker 20.10+
+- Docker Compose 2.x+
 
-## 配置说明
+## 快速开始
 
-1. 在 `auto_create_hive_table/resources/config.txt` 中配置数据库连接信息：
-   - Oracle 连接信息
-   - Hive 连接信息
-   - Spark 连接信息
+### 方法一：本地部署
 
-2. 确保 `dw/ods/meta_data/tablenames.txt` 包含了需要处理的表名列表
+1. 克隆项目
+```bash
+git clone https://github.com/your-repo/PKu2024_bigData.git
+cd PKu2024_bigData
+```
 
-## 使用方法
-
-### 方法一：直接运行
-
-1. 安装依赖：
+2. 安装依赖
 ```bash
 pip install -r requirements.txt
 ```
 
-2. 运行主程序：
+3. 配置数据库连接
+编辑 `auto_create_hive_table/resources/config.txt`
+
+4. 运行程序
 ```bash
 python auto_create_hive_table/cn/pku/EntranceApp.py
 ```
 
-### 方法二：Docker 部署
+### 方法二：Docker部署
 
-本项目支持使用 Docker 进行部署，提供了完整的容器化支持。
-
-#### 前置要求
-
-- 安装 Docker：[Docker 安装指南](https://docs.docker.com/get-docker/)
-- 安装 Docker Compose：[Docker Compose 安装指南](https://docs.docker.com/compose/install/)
-
-#### Docker 部署步骤
-
-1. **准备配置文件**
-
-确保以下配置文件已正确设置：
-- `auto_create_hive_table/resources/config.txt`：数据库连接配置
-- `dw/ods/meta_data/tablenames.txt`：表名列表
-
-2. **构建和运行容器**
-
-方法 1：使用脚本（推荐）
+1. 构建并启动容器
 ```bash
-# 添加执行权限
 chmod +x docker-run.sh
-
-# 运行脚本
 ./docker-run.sh
 ```
 
-方法 2：手动执行
-```bash
-# 构建镜像
-docker-compose build
-
-# 启动服务
-docker-compose up -d
-
-# 查看日志
-docker-compose logs -f
-```
-
-3. **停止服务**
-```bash
-docker-compose down
-```
-
-#### Docker 目录映射
-
-Docker 配置中包含以下目录映射：
-- `./auto_create_hive_table:/app/auto_create_hive_table`：代码和配置文件
-- `./dw:/app/dw`：数据仓库文件
-- `./logs:/app/logs`：日志文件
-
-#### 环境变量
-
-Docker 环境中已配置以下环境变量：
-- `ORACLE_HOME=/usr/lib/oracle/client`
-- `LD_LIBRARY_PATH=/usr/lib/oracle/client`
-- `TNS_ADMIN=/app/auto_create_hive_table/resources`
-
-#### 注意事项
-
-1. 确保 Docker 容器能够访问：
-   - Oracle 数据库
-   - Hive 服务
-   - HDFS 服务
-
-2. 如果修改了配置文件，需要重新构建镜像：
-```bash
-docker-compose build --no-cache
-```
-
-3. 查看容器状态：
+2. 查看运行状态
 ```bash
 docker-compose ps
 ```
 
-4. 查看容器日志：
+## 配置说明
+
+### 数据库配置
+在 `config.txt` 中配置以下信息：
+- Oracle 连接参数
+- Hive 连接参数
+- Spark 配置参数
+
+### 日志配置
+- 日志级别：DEBUG/INFO/WARN/ERROR
+- 输出方式：控制台/文件
+- 轮转策略：大小/时间
+- 保留策略：数量/天数
+
+## 开发指南
+
+### 代码规范
+- 遵循PEP 8规范
+- 使用类型注解
+- 编写单元测试
+- 添加详细注释
+
+### 分支管理
+- main: 主分支
+- develop: 开发分支
+- feature/*: 功能分支
+- hotfix/*: 修复分支
+
+## 测试
+
+### 单元测试
 ```bash
-docker-compose logs -f
+python -m pytest tests/
 ```
 
-5. 进入容器调试：
+### 集成测试
 ```bash
-docker-compose exec pkubigdata bash
+python -m pytest tests/integration/
 ```
 
-## 故障排除
+## 部署
 
-1. 如果遇到数据库连接问题：
-   - 检查 config.txt 中的连接配置
-   - 确保网络连接正常
-   - 检查相关服务是否启动
+### 生产环境部署步骤
+1. 准备环境
+2. 配置参数
+3. 部署服务
+4. 验证运行
 
-2. 如果遇到权限问题：
-   - 检查用户权限设置
-   - 确保日志目录可写
+### 监控和维护
+- 日志监控
+- 性能监控
+- 错误告警
+- 定期备份
 
-3. 如果遇到 Docker 相关问题：
-   - 检查 Docker 服务状态
-   - 查看容器日志
-   - 确保端口未被占用
+## 常见问题
 
-## 维护和更新
+### 数据库连接问题
+- 检查网络连接
+- 验证账号权限
+- 确认服务状态
 
-1. 更新代码后重新构建：
-```bash
-git pull
-docker-compose build --no-cache
-docker-compose up -d
-```
+### Docker相关问题
+- 检查Docker服务
+- 确认端口占用
+- 查看容器日志
 
-2. 清理 Docker 资源：
-```bash
-# 停止并删除容器
-docker-compose down
+## 版本历史
 
-# 清理未使用的镜像
-docker image prune -f
-```
+### v1.0.0 (2024-01-01)
+- 初始版本发布
+- 基础功能实现
+
+### v1.1.0 (2024-02-01)
+- 添加Docker支持
+- 优化性能
+- 修复已知问题
+
+## 贡献指南
+1. Fork 项目
+2. 创建功能分支
+3. 提交变更
+4. 发起Pull Request
+
+## 许可证
+MIT License
+
+## 联系方式
+- 项目负责人：XXX
+- 邮箱：xxx@xxx.com
+- 项目主页：https://github.com/xxx/PKu2024_bigData
+
+## 致谢
+感谢所有为本项目做出贡献的同学和老师。
